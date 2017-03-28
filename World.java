@@ -15,6 +15,19 @@ package assignment5;
 import java.util.ArrayList;
 import java.util.List;
 
+import assignment5.Critter.CritterShape;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+
 /**
  * This class holds the world of Critters. It utilizes a 2D array based off the coordinate system
  * defined in Critter. In each x-y coordinate pair, there is an ArrayList of Critters. Methods can be used
@@ -24,6 +37,13 @@ import java.util.List;
  */
 public class World {
 	private static List<List<List<Critter>>> array = new ArrayList<List<List<Critter>>>();
+	public static int pixels;
+
+	static {
+		int max = Math.max(Params.world_height, Params.world_width);
+
+		pixels = ((10 - max/10) * 9 + 10);
+	}
 
 	/**
 	 * Initializes static array, there should be one instance of World regardless of runs.
@@ -44,7 +64,7 @@ public class World {
 	 * @param y_coord The y coordinate
 	 */
 	public void addCritter(Critter c, int x_coord, int y_coord) {
-		array.get(x_coord).get(y_coord).add(c);
+		array.get(x_coord).get(y_coord).add(0,c);
 	}
 
 	/**
@@ -111,6 +131,84 @@ public class World {
 		System.out.println("+");
 	}
 
+	public void printWorld(GridPane gp) {
+
+		//set colums
+		for(int i = 0; i < Params.world_width; i++) {
+			gp.getColumnConstraints().add(new ColumnConstraints(pixels));
+		}
+		for(int i = 0; i < Params.world_height; i++) {
+			gp.getRowConstraints().add(new RowConstraints(pixels));
+		}
+
+
+		for(int i = 0; i < Params.world_width; i++) {
+			for(int j = 0; j < Params.world_height; j++) {
+				if(array.get(i).get(j).size() > 0) {
+					Critter c = array.get(i).get(j).get(0);
+					Shape s = getShape(c.viewShape());
+					s.setFill(c.viewFillColor());
+					s.setStroke(c.viewOutlineColor());
+					s.setStrokeWidth(1);
+					gp.add(s, i, j);
+					GridPane.setHalignment((Node) s,HPos.CENTER);
+					GridPane.setValignment((Node) s,VPos.CENTER);
+				}
+			}
+		}
+		gp.setGridLinesVisible(true);
+	}
+	private static Shape getShape(CritterShape cs) {
+		switch(cs) {
+		case CIRCLE:
+			Circle c =  new Circle();
+			c.setRadius((pixels/2) - 2);
+			return c;
+		case SQUARE:
+			Rectangle r = new Rectangle();
+			r.setWidth(pixels - 4);
+			r.setHeight(pixels - 4);
+			return r;
+		case TRIANGLE:
+			Polygon tri = new Polygon();
+			tri.getPoints().addAll(new Double[] {
+					((double) pixels)/2.0 , 2.0,
+					2.0, (double) pixels - 2,
+					(double) pixels - 2, (double) pixels - 2
+
+			});
+			return tri;
+		case DIAMOND:
+			Polygon dia = new Polygon();
+			dia.getPoints().addAll(new Double[] {
+					((double) pixels)/2.0, 2.0,
+					2.0, ((double) pixels)/2.0,
+					((double) pixels)/2.0, (double) pixels - 2.0 ,
+					(double) pixels - 2.0, ((double) pixels)/2.0
+
+			});
+			return dia;
+		case STAR:
+			Polygon star = new Polygon();
+			star.getPoints().addAll(new Double[] {
+					((double) pixels)/2.0, 2.0,
+					(double) pixels/3.0, (double) pixels/3.0,
+					2.0, (double) pixels/3.0,
+					(double) pixels* 2.0/7.0, ((double) pixels)/2.0,
+					(double) pixels/8.0, (double) 7.0 * pixels/8.0,
+					((double) pixels)/2.0, (double) 4.0 * pixels/6.0, 
+					(double) 7.0 * pixels/8.0, (double) 7.0 * pixels/8.0, 
+					(double) 5.0 * pixels/7.0, (double) pixels/2.0, 
+					(double) pixels - 2.0, (double) pixels/3.0, 
+					(double) 2.0 * pixels/3.0, (double) pixels/3.0, 
+					
+			});
+			return star;
+
+		default:
+			return new Polygon();
+		}
+	}
 	/**
 	 * This method clears all the ArrayLists at all the coordinates in the World
 	 */
