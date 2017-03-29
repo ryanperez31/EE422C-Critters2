@@ -50,7 +50,7 @@ public class Craig extends Critter {
 		dir = (dir + turn) % 8;
 	}
 
-	public static void runStats(java.util.List<Critter> craigs) {
+	public static String runStats(java.util.List<Critter> craigs) {
 		int total_straight = 0;
 		int total_left = 0;
 		int total_right = 0;
@@ -62,12 +62,12 @@ public class Craig extends Critter {
 			total_back += c.genes[4];
 			total_left += c.genes[5] + c.genes[6] + c.genes[7];
 		}
-		System.out.print("" + craigs.size() + " total Craigs    ");
-		System.out.print("" + total_straight / (GENE_TOTAL * 0.01 * craigs.size()) + "% straight   ");
-		System.out.print("" + total_back / (GENE_TOTAL * 0.01 * craigs.size()) + "% back   ");
-		System.out.print("" + total_right / (GENE_TOTAL * 0.01 * craigs.size()) + "% right   ");
-		System.out.print("" + total_left / (GENE_TOTAL * 0.01 * craigs.size()) + "% left   ");
-		System.out.println();
+		String stat = ("" + craigs.size() + " total Craigs    ");
+		stat += ("" + total_straight / (GENE_TOTAL * 0.01 * craigs.size()) + "% straight   ");
+		stat += ("" + total_back / (GENE_TOTAL * 0.01 * craigs.size()) + "% back   ");
+		stat += ("" + total_right / (GENE_TOTAL * 0.01 * craigs.size()) + "% right   ");
+		stat += ("" + total_left / (GENE_TOTAL * 0.01 * craigs.size()) + "% left   ");
+		return stat;
 	}
 	
 	@Override
