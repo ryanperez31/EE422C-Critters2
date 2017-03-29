@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.scene.layout.GridPane;
 
 import java.util.Iterator;
 
@@ -445,7 +446,10 @@ public abstract class Critter {
 	}
 
 
-	public static void displayWorld(Object pane) {} 
+	public static void displayWorld(Object pane) {
+		world.printWorld((GridPane) pane);
+	}
+	
 	/* Alternate displayWorld, where you use Main.<pane> to reach into your
 	   display component.
 	   // public static void displayWorld() {}

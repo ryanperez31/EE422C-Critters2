@@ -132,15 +132,16 @@ public class World {
 	}
 
 	public void printWorld(GridPane gp) {
-
-		//set colums
+		
+		gp.getChildren().clear();
+		
+		//set columns
 		for(int i = 0; i < Params.world_width; i++) {
 			gp.getColumnConstraints().add(new ColumnConstraints(pixels));
 		}
 		for(int i = 0; i < Params.world_height; i++) {
 			gp.getRowConstraints().add(new RowConstraints(pixels));
 		}
-
 
 		for(int i = 0; i < Params.world_width; i++) {
 			for(int j = 0; j < Params.world_height; j++) {
