@@ -132,9 +132,14 @@ public class World {
 	}
 
 	public void printWorld(GridPane gp) {
-		
+
+		gp.setStyle("-fx-background-color: #FFFFFF;");
+		gp.setGridLinesVisible(true);
+		gp.getChildren().add(new Polygon());
+		Node node = gp.getChildren().get(0);
 		gp.getChildren().clear();
-		
+		gp.getChildren().add(0,node);
+
 		//set columns
 		for(int i = 0; i < Params.world_width; i++) {
 			gp.getColumnConstraints().add(new ColumnConstraints(pixels));
@@ -202,7 +207,7 @@ public class World {
 					(double) 5.0 * pixels/7.0, (double) pixels/2.0, 
 					(double) pixels - 2.0, (double) pixels/3.0, 
 					(double) 2.0 * pixels/3.0, (double) pixels/3.0, 
-					
+
 			});
 			return star;
 
