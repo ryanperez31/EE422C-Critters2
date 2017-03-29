@@ -93,4 +93,14 @@ public class Critter3 extends Critter {
 		System.out.println();
 	}
 
+	@Override
+	public CritterShape viewShape() {
+		return CritterShape.STAR;
+	}
+	
+	@Override
+	public javafx.scene.paint.Color viewFillColor() {
+		return javafx.scene.paint.Color.LIGHTSTEELBLUE;
+	}
+
 }

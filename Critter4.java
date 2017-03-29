@@ -1,5 +1,6 @@
 package assignment5;
 
+
 /* CRITTERS GUI Critter4.java
  * EE422C Project 5 submission by
  * Samuel Zhang
@@ -117,5 +118,28 @@ public class Critter4 extends Critter{
 
 		System.out.println();
 	} 	
+	
+	@Override
+	public CritterShape viewShape() {
+		return CritterShape.DIAMOND;
+	}
+	
+	
+	public javafx.scene.paint.Color viewFillColor() {
+		if (color.equals("Red"))
+			return javafx.scene.paint.Color.RED;
+		else if (color.equals("Blue"))
+			return javafx.scene.paint.Color.BLUE;
+		else if (color.equals("Green"))
+			return javafx.scene.paint.Color.GREEN;
+		else if (color.equals("Yellow"))
+			return javafx.scene.paint.Color.YELLOW;
+		else if (color.equals("Purple"))
+			return javafx.scene.paint.Color.PURPLE;
+		else if (color.equals("Burnt Orange"))
+			return javafx.scene.paint.Color.DARKORANGE;
+		else
+			return javafx.scene.paint.Color.WHITE;
+	}
 
 }

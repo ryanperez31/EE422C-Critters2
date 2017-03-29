@@ -72,4 +72,13 @@ public class Critter1 extends Critter {
 		System.out.print("" + crit1.size() + " total Critter1's    ");	
 		System.out.println();
 	}
+
+	@Override
+	public CritterShape viewShape() {
+		return CritterShape.CIRCLE;
+	}
+	
+	public javafx.scene.paint.Color viewOutlineColor() {
+		return javafx.scene.paint.Color.RED;
+	}
 }

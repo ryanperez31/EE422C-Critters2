@@ -106,4 +106,13 @@ public class Critter2 extends Critter {
 		System.out.print("Critter2 babies: " + babies);
 		System.out.println();
 	}
+
+	@Override
+	public CritterShape viewShape() {
+		return CritterShape.TRIANGLE;
+	}
+	
+	public javafx.scene.paint.Color viewColor() {
+		return javafx.scene.paint.Color.PURPLE;
+	}
 }
