@@ -43,11 +43,6 @@ public class Main extends Application{
 	static GridPane worldGrid = new GridPane();
 	double speedInd = 0.0;
 	private int timeStep = 0;
-	
-	private Label critterNotif = new Label();
-	private Label randomNotif = new Label();
-	private Label tsNotif = new Label();
-	private Label animateNotif = new Label();
 
 
 	static {
@@ -91,19 +86,13 @@ public class Main extends Application{
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
-		grid.setVgap(15);
+		grid.setVgap(20);
 		grid.setHgap(10);
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(25);
 		ColumnConstraints col2 = new ColumnConstraints();
 		col2.setPercentWidth(30);
 		grid.getColumnConstraints().addAll(col1, col2);
-		
-		grid.add(critterNotif, 0 , 6);
-		grid.add(randomNotif, 0, 8);
-		grid.add(tsNotif, 0 ,10);
-		grid.add(animateNotif, 0, 12);
-
 
 		Label title = new Label("Welcome to Critters!");
 		title.setFont(Font.font("Bradley Hand ITC", 50));
@@ -121,7 +110,9 @@ public class Main extends Application{
 		number.setPromptText("Num of Critters");
 		GridPane.setConstraints(number, 1, 5);
 		
-	
+		Label critterNotif = new Label();
+		grid.add(critterNotif, 0 , 6);
+
 		Button makeCritter = new Button("Make Critters!");
 		makeCritter.setOnAction(e -> getCritterResults(critters, number, critterNotif));
 		makeCritter.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -137,6 +128,8 @@ public class Main extends Application{
 		number3.setPromptText("Random Seed");
 		GridPane.setConstraints(number3, 1, 7);
 		
+		Label randomNotif = new Label();
+		grid.add(randomNotif, 0, 8);
 		
 
 		Button performSeed = new Button("Randomize!");
@@ -168,6 +161,8 @@ public class Main extends Application{
 		number2.setPromptText("Num of Time Steps");
 		GridPane.setConstraints(number2, 1, 9);
 		
+		Label tsNotif = new Label();
+		grid.add(tsNotif, 0 ,10);
 		
 		Label numSteps = new Label("Time Step: " + timeStep);
 		grid.add(numSteps, 1, 10);
@@ -234,7 +229,6 @@ public class Main extends Application{
 		stop.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				resetLabels();
 				timer.stop();
 				stop.setDisable(true);
 				makeCritter.setDisable(false);
@@ -249,10 +243,10 @@ public class Main extends Application{
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				resetLabels();
+
 				if (speedChoice.getValue()!=null) {
-					animateNotif.setText("Animating");
-					animateNotif.setTextFill(javafx.scene.paint.Color.BLUE);
+					tsNotif.setText("Animating");
+					tsNotif.setTextFill(javafx.scene.paint.Color.BLUE);
 					stop.setDisable(false);
 					makeCritter.setDisable(true);
 					performTime.setDisable(true);
@@ -268,27 +262,14 @@ public class Main extends Application{
 					timer.start();
 				}
 				else {
-					animateNotif.setText("Must Set Speed");
-					animateNotif.setTextFill(javafx.scene.paint.Color.RED);
+					tsNotif.setText("Must Set Speed");
+					tsNotif.setTextFill(javafx.scene.paint.Color.RED);
 				}
 
 
 			}
 		});
 
-		
-		// reset button
-		Button reset = new Button("Reset World");
-		reset.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				resetLabels();
-				Critter.clearWorld();
-				Critter.displayWorld(worldGrid);
-			}
-		});
-		reset.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		GridPane.setConstraints(reset, 3, 19);
 
 
 		// exit button
@@ -304,7 +285,7 @@ public class Main extends Application{
 
 		grid.getChildren().addAll(title, addCritter, critters, number, makeCritter,
 				timeSteps, number2, performTime, runStats, setSeed, number3, performSeed,
-				speed, speedChoice, start, stop, reset, exit);
+				speed, speedChoice, start, stop, exit);
 
 
 		Scene scene = new Scene(grid, 500, 750);
@@ -334,7 +315,6 @@ public class Main extends Application{
 	}
 
 	private void getCritterResults(ChoiceBox<String> critters, TextField number, Label critterNotif) {
-		resetLabels();
 		if (critters.getValue() != null) {
 			if (number.getText()!= null && !number.getText().isEmpty()) {
 				int num;
@@ -371,7 +351,6 @@ public class Main extends Application{
 	}
 
 	private void getTimeResults(TextField number, CheckBox[] classes, Label notif, Label tSteps) {
-		resetLabels();
 		if (number.getText()!=null && !number.getText().isEmpty()) {
 			int num;
 			
@@ -405,7 +384,6 @@ public class Main extends Application{
 	}
 
 	private void getRunStatsResults(CheckBox[] classes) {
-		resetLabels();
 		statistics.clear();
 		for (int i = 0; i < classes.length; i++) {
 			String critterName = validCritters.get(i);
@@ -433,7 +411,6 @@ public class Main extends Application{
 	}
 
 	private void getRandomSeed(TextField number, Label notif) {
-		resetLabels();
 		if (number.getText()!=null && !number.getText().isEmpty()) {
 			int n;
 			try{
@@ -448,13 +425,6 @@ public class Main extends Application{
 			notif.setText("Seed: " + n);
 			notif.setTextFill(javafx.scene.paint.Color.GREEN);
 		}
-	}
-	
-	private void resetLabels() {
-		critterNotif.setText("");
-		randomNotif.setText("");
-		tsNotif.setText("");
-		timeStep = 0;
 	}
 
 
