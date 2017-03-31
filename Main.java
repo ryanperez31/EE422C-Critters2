@@ -240,7 +240,7 @@ public class Main extends Application{
 				makeCritter.setDisable(false);
 				performTime.setDisable(false);
 				performSeed.setDisable(false);
-				tsNotif.setText("");
+				animateNotif.setText("");
 			}
 		});
 
@@ -457,7 +457,6 @@ public class Main extends Application{
 		critterNotif.setText("");
 		randomNotif.setText("");
 		tsNotif.setText("");
-		timeStep = 0;
 	}
 
 

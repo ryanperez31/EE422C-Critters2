@@ -36,7 +36,7 @@ import javafx.scene.shape.Shape;
  *
  */
 public class World {
-	private static List<List<List<Critter>>> array = new ArrayList<List<List<Critter>>>();
+	private List<List<List<Critter>>> array = new ArrayList<List<List<Critter>>>();
 	public static int pixels;
 
 	static {
@@ -60,11 +60,29 @@ public class World {
 	}
 	
 	/*
-	 * Copy constructor
+	 * deep copy
 	 */
-	public World(World old) {
-		this.array = old.array;
-		this.pixels = old.pixels;
+	public World deepCopy() {
+		World copy = new World();
+		List<List<List<Critter>>> array = new ArrayList<List<List<Critter>>>();
+		for(int i = 0; i < Params.world_width; i++) {
+			array.add(new ArrayList<List<Critter>>());
+			for(int j = 0; j < Params.world_height; j++) {
+				array.get(i).add(new ArrayList<Critter>());
+			}
+		}
+		
+		for (int i = 0; i < Params.world_width; i++) {
+			for (int j = 0; j < Params.world_height; j++) {
+				ArrayList<Critter> here = getCritters(i,  j);
+				for (int k = 0; k < here.size(); k++) {
+					array.get(i).get(j).add(here.get(k));
+				}
+			}
+		}
+		
+		copy.array = array;
+		return copy;
 	}
 
 	/**

@@ -330,7 +330,8 @@ public abstract class Critter {
 	 */
 	public static void worldTimeStep() {
 
-		oldWorld = new World(world);
+		oldWorld = world.deepCopy();
+		
 		// do each Critter's doTimeStep
 		for (Critter c : population) {
 			c.hasMoved = false;
