@@ -99,8 +99,9 @@ public class Critter4 extends Critter{
 	 * Print out the number of Critter4's in the population and the amount of each color.
 	 * @param crit4 List of Critter4's from population 
 	 */
-	public static void runStats(java.util.List<Critter> crit4) {
-		System.out.print("" + crit4.size() + " total Critter4's    ");
+	public static String runStats(java.util.List<Critter> crit4) {
+		String stats = "";
+		stats += "" + crit4.size() + " total Critter4's    ";
 
 		for(int i = 0; i < colors.length; i++ ){
 			int count = 0;
@@ -113,10 +114,9 @@ public class Critter4 extends Critter{
 					count++;
 			}
 
-			System.out.print("" + count + " " + colors[i] + " Critter4's   ");
+			stats += "" + count + " " + colors[i] + " Critter4's   ";
 		}
-
-		System.out.println();
+		return stats;
 	} 	
 	
 	@Override
@@ -125,7 +125,7 @@ public class Critter4 extends Critter{
 	}
 	
 	
-	public javafx.scene.paint.Color viewFillColor() {
+	public javafx.scene.paint.Color viewColor() {
 		if (color.equals("Red"))
 			return javafx.scene.paint.Color.RED;
 		else if (color.equals("Blue"))

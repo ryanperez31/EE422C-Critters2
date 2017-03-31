@@ -101,10 +101,11 @@ public class Critter2 extends Critter {
 		return "2";
 	}
 	
-	public static void runStats(java.util.List<Critter> crit2) {
-		System.out.print("" + crit2.size() + " total Critter2's    ");
-		System.out.print("Critter2 babies: " + babies);
-		System.out.println();
+	public static String runStats(java.util.List<Critter> crit2) {
+		String stats = "";
+		stats += "" + crit2.size() + " total Critter2's    ";
+		stats += "Critter2 babies: " + babies;
+		return stats;
 	}
 
 	@Override

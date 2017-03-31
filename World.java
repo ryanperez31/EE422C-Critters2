@@ -41,8 +41,10 @@ public class World {
 
 	static {
 		int max = Math.max(Params.world_height, Params.world_width);
-
-		pixels = ((10 - max/10) * 9 + 10);
+		if (max > 100) { max = 100; }
+		pixels = (800/max);
+		
+		
 	}
 
 	/**
@@ -140,13 +142,7 @@ public class World {
 		gp.getChildren().clear();
 		gp.getChildren().add(0,node);
 
-		//set columns
-		for(int i = 0; i < Params.world_width; i++) {
-			gp.getColumnConstraints().add(new ColumnConstraints(pixels));
-		}
-		for(int i = 0; i < Params.world_height; i++) {
-			gp.getRowConstraints().add(new RowConstraints(pixels));
-		}
+		
 
 		for(int i = 0; i < Params.world_width; i++) {
 			for(int j = 0; j < Params.world_height; j++) {

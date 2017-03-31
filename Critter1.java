@@ -68,9 +68,9 @@ public class Critter1 extends Critter {
 		return "1";
 	}
 	
-	public static void runStats(java.util.List<Critter> crit1) {
-		System.out.print("" + crit1.size() + " total Critter1's    ");	
-		System.out.println();
+	public static String runStats(java.util.List<Critter> crit1) {
+		return ("" + crit1.size() + " total Critter1's    ");	
+
 	}
 
 	@Override

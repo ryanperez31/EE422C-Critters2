@@ -86,11 +86,12 @@ public class Critter3 extends Critter {
 	 * Print out global variables and total amount of Critter3's still alive
 	 * @param crit3 List of Critter3's from population 
 	 */
-	public static void runStats(java.util.List<Critter> crit3) {
-		System.out.print("" + crit3.size() + " total Critter3's    ");
-		System.out.print("Reproduced " + timesReproduced + " times   ");
-		System.out.print("Total Suicides: " + suicides);
-		System.out.println();
+	public static String runStats(java.util.List<Critter> crit3) {
+		String stats = "";
+		stats += "" + crit3.size() + " total Critter3's    ";
+		stats += "Reproduced " + timesReproduced + " times   ";
+		stats += "Total Suicides: " + suicides;
+		return stats;
 	}
 
 	@Override
@@ -99,8 +100,8 @@ public class Critter3 extends Critter {
 	}
 	
 	@Override
-	public javafx.scene.paint.Color viewFillColor() {
-		return javafx.scene.paint.Color.LIGHTSTEELBLUE;
+	public javafx.scene.paint.Color viewColor() {
+		return javafx.scene.paint.Color.ORANGE;
 	}
 
 }
