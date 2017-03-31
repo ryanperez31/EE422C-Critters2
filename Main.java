@@ -285,6 +285,9 @@ public class Main extends Application{
 				resetLabels();
 				Critter.clearWorld();
 				Critter.displayWorld(worldGrid);
+				timeStep = 0;
+				numSteps.setText("Time Step: " + timeStep);
+				
 			}
 		});
 		reset.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

@@ -67,7 +67,10 @@ public class Critter3 extends Critter {
 		
 		// If it sees a Critter3 friend, it will simply walk away and avoid all conflict
 		if(opponent.equals("3")) {
-			walk(Critter.getRandomInt(8));
+			
+			int direction = Critter.getRandomInt(8);
+			this.look(direction, false);
+			walk(direction);
 			return false;
 		}
 				

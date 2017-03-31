@@ -46,9 +46,13 @@ public class Critter4 extends Critter{
 	 */
 	public void doTimeStep() {
 
-		// 25% of the time, walk around
+		// 25% of the time, the Critter will walk around
 		if(Critter.getRandomInt(4) == 3) {
-			walk(Critter.getRandomInt(8));
+			int direction = Critter.getRandomInt(8);
+			//self-preservation check
+			String critString = this.look(direction, false);
+			if(critString.equals(null) || critString.equals("@") || critString.equals("4"))
+				walk(direction);
 		}
 
 		// 10% of the time reproduce a baby of the same color
