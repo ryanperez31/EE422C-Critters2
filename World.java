@@ -58,6 +58,14 @@ public class World {
 			}
 		}
 	}
+	
+	/*
+	 * Copy constructor
+	 */
+	public World(World old) {
+		this.array = old.array;
+		this.pixels = old.pixels;
+	}
 
 	/**
 	 * This method takes a Critter c and adds it to the ArrayList at (x_coord, y_coord)

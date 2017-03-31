@@ -33,6 +33,7 @@ public abstract class Critter {
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Set<Critter> population = new HashSet<Critter>();
 	private static World world = new World();
+	private static World oldWorld;
 	private boolean baby = false;
 	private boolean hasMoved = false;
 	private boolean inFight = false;
@@ -72,7 +73,26 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 
-	protected final String look(int direction, boolean steps) {return "";}
+	protected final String look(int direction, boolean steps) {
+		
+		this.energy -= Params.look_energy_cost;
+		
+		int x = getNewX(this.x_coord ,direction);
+		int y = getNewY(this.y_coord, direction);
+		
+		if (steps) {
+			x = getNewX(x, direction);
+			y = getNewY(y, direction);
+		}
+		
+		if (inFight) {
+			return world.getCritters(x, y).get(0).toString();
+		}
+		
+		else {
+			return oldWorld.getCritters(x, y).get(0).toString();
+		}
+	}
 
 	/* rest is unchanged from Project 4 */
 
@@ -310,6 +330,7 @@ public abstract class Critter {
 	 */
 	public static void worldTimeStep() {
 
+		oldWorld = new World(world);
 		// do each Critter's doTimeStep
 		for (Critter c : population) {
 			c.hasMoved = false;
