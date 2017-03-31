@@ -159,9 +159,15 @@ public class World {
 		System.out.println("+");
 	}
 
+	/**
+	 * This method changes the GridPane passed in and displays the World array 
+	 * @param gp the GridPane that will display the World
+	 */
 	public void printWorld(GridPane gp) {
 
 		gp.setStyle("-fx-background-color: #FFFFFF;");
+		
+		//To keep gridlines
 		gp.setGridLinesVisible(true);
 		gp.getChildren().add(new Polygon());
 		Node node = gp.getChildren().get(0);
@@ -172,7 +178,11 @@ public class World {
 
 		for(int i = 0; i < Params.world_width; i++) {
 			for(int j = 0; j < Params.world_height; j++) {
+				
+				// if critter exists at coordinate
 				if(array.get(i).get(j).size() > 0) {
+					
+					//print only the first Critter
 					Critter c = array.get(i).get(j).get(0);
 					Shape s = getShape(c.viewShape());
 					s.setFill(c.viewFillColor());
@@ -186,6 +196,12 @@ public class World {
 		}
 		gp.setGridLinesVisible(true);
 	}
+	
+	/**
+	 * Given the CritterShape passed in, return a Shape object that can then be printed onto GridPane
+	 * @param cs the CritterShape keyword
+	 * @return Shape object of desired CritterShape
+	 */
 	private static Shape getShape(CritterShape cs) {
 		switch(cs) {
 		case CIRCLE:
