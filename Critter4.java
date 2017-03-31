@@ -51,7 +51,7 @@ public class Critter4 extends Critter{
 			int direction = Critter.getRandomInt(8);
 			//self-preservation check
 			String critString = this.look(direction, false);
-			if(critString.equals(null) || critString.equals("@") || critString.equals("4"))
+			if(critString == (null) || critString.equals("@") || critString.equals("4"))
 				walk(direction);
 		}
 

@@ -73,6 +73,13 @@ public abstract class Critter {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}
 
+	/**
+	 * This function returns the toString of the Critter (or null if no Critter) in the direction given
+	 * given whether or not the Critter chooses to walk/run. 
+	 * @param direction An integer corresponding to the direction in question
+	 * @param steps A boolean. True if two steps, false if one step
+	 * @return The toString of the Critter in question or null if there is no Critter
+	 */
 	protected final String look(int direction, boolean steps) {
 		
 		this.energy -= Params.look_energy_cost;
@@ -80,17 +87,27 @@ public abstract class Critter {
 		int x = getNewX(this.x_coord ,direction);
 		int y = getNewY(this.y_coord, direction);
 		
+		// if steps is true check for run condition
 		if (steps) {
 			x = getNewX(x, direction);
 			y = getNewY(y, direction);
 		}
 		
+		
+		// if inFight then check with most updated world
 		if (inFight) {
-			return world.getCritters(x, y).get(0).toString();
+			if(world.getCritters(x, y).size() != 0)
+				return world.getCritters(x, y).get(0).toString();
+			else
+				return null;
 		}
 		
+		// if look is called in TimeStep use "old world"
 		else {
-			return oldWorld.getCritters(x, y).get(0).toString();
+			if(oldWorld.getCritters(x, y).size() != 0) 
+				return oldWorld.getCritters(x, y).get(0).toString();
+			else
+				return null;
 		}
 	}
 
