@@ -72,6 +72,10 @@ public class Main extends Application{
 
 	public void start(Stage primaryStage) {
 		
+		//for window positioning
+		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+				
+		
 		primaryStage.setTitle("Critters");
 		
 		// other stages (for displaying world and showing Critter stats
@@ -79,7 +83,7 @@ public class Main extends Application{
 		secondaryStage.setTitle("Critter Stats");
 		StackPane stats = new StackPane();
 		stats.getChildren().add(statistics);
-		Scene statScene = new Scene(stats, 400, 400);
+		Scene statScene = new Scene(stats,800 , primScreenBounds.getHeight()-800);
 		secondaryStage.setScene(statScene);
 		secondaryStage.show();
 		
@@ -89,8 +93,6 @@ public class Main extends Application{
 		worldStage.setScene(new Scene(worldGrid, Params.world_width*World.pixels, Params.world_height*World.pixels));
 		worldStage.show();
 
-		//set window positioning
-		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
 		
 		//Control Panel
         primaryStage.setX(0); 
@@ -99,6 +101,11 @@ public class Main extends Application{
         //World Stage
         worldStage.setX(primScreenBounds.getWidth() - worldStage.getWidth());
         worldStage.setY(0);
+        
+        //stats Stage
+        secondaryStage.setX(0);
+        secondaryStage.setY(primScreenBounds.getHeight()-secondaryStage.getHeight());
+        
 
 		// retrieving list of valid Critters in package
 		Class[] arr;
@@ -300,7 +307,7 @@ public class Main extends Application{
 				speed, speedChoice, start, stop, reset, exit);
 
 
-		Scene scene = new Scene(grid, 500, 750);
+		Scene scene = new Scene(grid, 500, 700);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
