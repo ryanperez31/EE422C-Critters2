@@ -38,20 +38,23 @@ import javafx.animation.AnimationTimer;
 public class Main extends Application{
 
 	private static String myPackage;
+	
 	private TextArea statistics = new TextArea();
 	List<String> validCritters = new ArrayList<String>();
 	static GridPane worldGrid = new GridPane();
 	double speedInd = 0.0;
 	private int timeStep = 0;
 	
+	// notification labels
 	private Label critterNotif = new Label();
 	private Label randomNotif = new Label();
 	private Label tsNotif = new Label();
 	private Label animateNotif = new Label();
 
-
+	// creating grid for displaying world
 	static {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
+		
 		//set columns
 		for(int i = 0; i < Params.world_width; i++) {
 			worldGrid.getColumnConstraints().add(new ColumnConstraints(World.pixels));
@@ -60,13 +63,18 @@ public class Main extends Application{
 			worldGrid.getRowConstraints().add(new RowConstraints(World.pixels));
 		}
 	}
+	
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
 
 	public void start(Stage primaryStage) {
+		
 		primaryStage.setTitle("Critters");
-
+		
+		// other stages (for displaying world and showing Critter stats
 		Stage secondaryStage = new Stage();
 		secondaryStage.setTitle("Critter Stats");
 		StackPane stats = new StackPane();
@@ -74,8 +82,25 @@ public class Main extends Application{
 		Scene statScene = new Scene(stats, 400, 400);
 		secondaryStage.setScene(statScene);
 		secondaryStage.show();
-
 		
+		Stage worldStage = new Stage();
+		worldStage.setTitle("World");
+		Critter.displayWorld(worldGrid);
+		worldStage.setScene(new Scene(worldGrid, Params.world_width*World.pixels, Params.world_height*World.pixels));
+		worldStage.show();
+
+		//set window positioning
+		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+		
+		//Control Panel
+        primaryStage.setX(0); 
+        primaryStage.setY(0);
+        
+        //World Stage
+        worldStage.setX(primScreenBounds.getWidth() - worldStage.getWidth());
+        worldStage.setY(0);
+
+		// retrieving list of valid Critters in package
 		Class[] arr;
 		try {
 			arr = getClasses(myPackage);
@@ -88,7 +113,7 @@ public class Main extends Application{
 			e.printStackTrace();
 		}
 
-
+		// setting up basics of the control panel
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(15);
@@ -104,12 +129,12 @@ public class Main extends Application{
 		grid.add(tsNotif, 0 ,10);
 		grid.add(animateNotif, 0, 12);
 
-
 		Label title = new Label("Welcome to Critters!");
 		title.setFont(Font.font("Bradley Hand ITC", 50));
 		GridPane.setConstraints(title, 0, 0, 4, 4);
 
-		// adding critters to the world
+		
+		// "Adding Critters" function
 		Label addCritter = new Label("Add a Critter: ");
 		GridPane.setConstraints(addCritter, 0, 5);
 
@@ -121,32 +146,27 @@ public class Main extends Application{
 		number.setPromptText("Num of Critters");
 		GridPane.setConstraints(number, 1, 5);
 		
-	
 		Button makeCritter = new Button("Make Critters!");
-		makeCritter.setOnAction(e -> getCritterResults(critters, number, critterNotif));
+		makeCritter.setOnAction(e -> getCritterResults(critters, number));
 		makeCritter.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		GridPane.setConstraints(makeCritter, 3, 5);
 
-		
 
-		// set random seed
+		// "Set Random Seed" function
 		Label setSeed = new Label("Set Random Seed: ");
 		GridPane.setConstraints(setSeed, 0, 7);
 
 		TextField number3 = new TextField();
 		number3.setPromptText("Random Seed");
 		GridPane.setConstraints(number3, 1, 7);
-		
-		
 
 		Button performSeed = new Button("Randomize!");
-		performSeed.setOnAction(e -> getRandomSeed(number3, randomNotif));
+		performSeed.setOnAction(e -> getRandomSeed(number3));
 		performSeed.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		GridPane.setConstraints(performSeed, 3, 7);
 
 
-
-		// runStats
+		// "Show Statistics" function
 		Label runStats = new Label("Show Stats: ");
 		GridPane.setConstraints(runStats, 0, 15);
 
@@ -157,10 +177,7 @@ public class Main extends Application{
 		}
 
 
-
-
-
-		// perform time steps
+		// "Perform Time Steps" function
 		Label timeSteps = new Label("Perform Time Steps:");
 		GridPane.setConstraints(timeSteps, 0, 9);
 
@@ -168,43 +185,19 @@ public class Main extends Application{
 		number2.setPromptText("Num of Time Steps");
 		GridPane.setConstraints(number2, 1, 9);
 		
-		
 		Label numSteps = new Label("Time Step: " + timeStep);
 		grid.add(numSteps, 1, 10);
 
-
 		Button performTime = new Button("Time Happened!");
-		performTime.setOnAction(e -> getTimeResults(number2, classes, tsNotif, numSteps));
+		performTime.setOnAction(e -> getTimeResults(number2, classes, numSteps));
 		performTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		GridPane.setConstraints(performTime, 3, 9);
 
-		// animation speed
+		
+		// "Animation Speed" function
 		Label speed = new Label("Animate:");
 		GridPane.setConstraints(speed, 0, 11);
 
-/*		Slider slide = new Slider();
-		slide.setMin(0);
-		slide.setMax(10);
-		slide.setValue(0);
-		slide.setShowTickLabels(true);
-		slide.setShowTickMarks(true);
-		slide.setMajorTickUnit(5);
-		slide.setBlockIncrement(1);
-		GridPane.setConstraints(slide, 1, 12);
-		
-		slide.valueProperty().addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-				try {
-				speedInd = 1/slide.getValue() *1000000000;
-				}
-				catch (Exception e) {
-					speedInd = -1;
-				}
-			}
-		});
-*/
 		ChoiceBox<String> speedChoice = new ChoiceBox<>();
 		speedChoice.getItems().addAll("1FPS", "5FPS", "10FPS");
 		GridPane.setConstraints(speedChoice, 1, 11);
@@ -221,10 +214,8 @@ public class Main extends Application{
 				numSteps.setText("Time Step: " + timeStep);
 				getRunStatsResults(classes);
 
-				while (System.nanoTime() - startTime < speedInd) {
-
-
-				}
+				// delay until next iteration of speedInd
+				while (System.nanoTime() - startTime < speedInd) {}
 			}
 		};
 
@@ -236,6 +227,7 @@ public class Main extends Application{
 			public void handle(ActionEvent event) {
 				resetLabels();
 				timer.stop();
+				// disable all other buttons on control panel
 				stop.setDisable(true);
 				makeCritter.setDisable(false);
 				performTime.setDisable(false);
@@ -247,37 +239,34 @@ public class Main extends Application{
 		Button start = new Button("Start");
 		GridPane.setConstraints(start, 3, 11);
 		start.setOnAction(new EventHandler<ActionEvent>() {
+			
 			@Override
 			public void handle(ActionEvent event) {
 				resetLabels();
 				if (speedChoice.getValue()!=null) {
 					animateNotif.setText("Animating");
 					animateNotif.setTextFill(javafx.scene.paint.Color.BLUE);
+					// disable other buttons on control panel
 					stop.setDisable(false);
 					makeCritter.setDisable(true);
 					performTime.setDisable(true);
 					performSeed.setDisable(true);
 					
-					// disable other buttons
-
 					String chosen = speedChoice.getValue();
 					if (chosen.equals("Slow")) speedInd = 1000000000;
 					else if (chosen.equals("Medium")) speedInd = 500000000;
 					else if (chosen.equals("Fast")) speedInd = 100000000;
-					// slide.setDisable(true);
 					timer.start();
 				}
 				else {
 					animateNotif.setText("Must Set Speed");
 					animateNotif.setTextFill(javafx.scene.paint.Color.RED);
 				}
-
-
 			}
 		});
 
 		
-		// reset button
+		// "Reset World" function
 		Button reset = new Button("Reset World");
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -294,7 +283,7 @@ public class Main extends Application{
 		GridPane.setConstraints(reset, 3, 19);
 
 
-		// exit button
+		// "Exit Critters" function
 		Button exit = new Button("Exit Critters");
 		exit.setOnAction(new EventHandler <ActionEvent>() {
 			@Override
@@ -305,6 +294,7 @@ public class Main extends Application{
 		exit.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		GridPane.setConstraints(exit, 3, 20);
 
+		// add all nodes to the control panel
 		grid.getChildren().addAll(title, addCritter, critters, number, makeCritter,
 				timeSteps, number2, performTime, runStats, setSeed, number3, performSeed,
 				speed, speedChoice, start, stop, reset, exit);
@@ -313,34 +303,28 @@ public class Main extends Application{
 		Scene scene = new Scene(grid, 500, 750);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
-		Stage worldStage = new Stage();
-		worldStage.setTitle("World");
-		Critter.displayWorld(worldGrid);
-		worldStage.setScene(new Scene(worldGrid, Params.world_width*World.pixels, Params.world_height*World.pixels));
-		worldStage.show();
-
-		
-		//set window positioning
-		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-		
-		//Control Panel
-        primaryStage.setX(0); 
-        primaryStage.setY(0);
-        
-        //World Stage
-        worldStage.setX(primScreenBounds.getWidth() - worldStage.getWidth());
-        worldStage.setY(0);
-
-
-
 	}
+	
 
-	private void getCritterResults(ChoiceBox<String> critters, TextField number, Label critterNotif) {
+	/**
+	 * This method retrieves the user's input into the "Make Critter" function on the control panel and 
+	 * executes the command.
+	 * 
+	 * @param critters - ChoidBox holds the user's input for type of Critter to create
+	 * @param number - TextField contains the user's input for number of Critters to create
+	 */
+	private void getCritterResults(ChoiceBox<String> critters, TextField number) {
+		
 		resetLabels();
+		
+		// there's a Critter type selected
 		if (critters.getValue() != null) {
+			
+			// there's a quantity typed in
 			if (number.getText()!= null && !number.getText().isEmpty()) {
+				
 				int num;
+				
 				try {
 					num = Integer.parseInt(number.getText());
 				}
@@ -350,12 +334,13 @@ public class Main extends Application{
 					return;
 				}
 				
-				// Invalid input
+				// invalid input
 				if(num <= 0) {
 					critterNotif.setText("Invalid Input");
 					critterNotif.setTextFill(javafx.scene.paint.Color.RED);
 				}
 
+				// create Critters of selected type and quantity
 				while (num > 0) {
 					try {
 						Critter.makeCritter(critters.getValue());
@@ -367,59 +352,94 @@ public class Main extends Application{
 					}
 					num--;
 				}
-
 			}
 		}
+		
 		Critter.displayWorld(worldGrid);
+		
 	}
 
-	private void getTimeResults(TextField number, CheckBox[] classes, Label notif, Label tSteps) {
+	/**
+	 * This method retrieves the user's input request for the "Perform Time Steps" function on the 
+	 * control panel and executes the corresponding number of time steps.
+	 * 
+	 * @param number - Textfield containing user's input for number of Time Steps user wants to perform
+	 * @param classes - CheckBox array containing user's input for which Critters the user would like to display
+	 * 				statistics for
+	 * @param numTimeSteps - Label displaying how many time steps have passed
+	 */
+	private void getTimeResults(TextField number, CheckBox[] classes, Label numTimeSteps) {
+		
 		resetLabels();
+		
+		// there's a number typed in
 		if (number.getText()!=null && !number.getText().isEmpty()) {
+			
 			int num;
 			
 			try {
 				num = Integer.parseInt(number.getText());
 			}
 			catch (Exception e) {
-				notif.setText("Invalid Input");
-				notif.setTextFill(javafx.scene.paint.Color.RED);
+				tsNotif.setText("Invalid Input");
+				tsNotif.setTextFill(javafx.scene.paint.Color.RED);
 				return;
 			}
 
+			// invalid input
 			if (num <= 0) {
-				notif.setText("Invalid Input");
-				notif.setTextFill(javafx.scene.paint.Color.RED);
+				tsNotif.setText("Invalid Input");
+				tsNotif.setTextFill(javafx.scene.paint.Color.RED);
 				return;
 			}
 			
-			notif.setText("Ran " + num + " Time Steps");
-			notif.setTextFill(javafx.scene.paint.Color.GREEN);
+			// update on-screen dispaly of time steps passed
+			tsNotif.setText("Ran " + num + " Time Steps");
+			tsNotif.setTextFill(javafx.scene.paint.Color.GREEN);
 			
+			// perform time steps
 			while (num > 0) {
 				Critter.worldTimeStep();
 				timeStep++;
-				tSteps.setText("Time Step: " + timeStep);
+				numTimeSteps.setText("Time Step: " + timeStep);
 				num--;
 			}
 		}
+		
 		Critter.displayWorld(worldGrid);
+		// run stats for specified Critters
 		getRunStatsResults(classes);
 	}
-
+	
+	/**
+	 * This function will output the statistics for the Critters the user has selected to
+	 * show stats for.
+	 * 
+	 * @param classes - CheckBox array containing user's input for which Critters the user would like to display
+	 */
 	private void getRunStatsResults(CheckBox[] classes) {
+		
 		resetLabels();
 		statistics.clear();
+		
+		// iterate through all Critters
 		for (int i = 0; i < classes.length; i++) {
+			
 			String critterName = validCritters.get(i);
+			
+			// user has selected to display stats for this critter
 			if (classes[i].isSelected()) {
+				
 				List<Critter> populace;
+				
 				try {
 					populace = Critter.getInstances(critterName);
 				} catch (InvalidCritterException e) {
 					//will never happen
 					return;
 				}
+				
+				// invoke that critter's runStats method, if it exists
 				Class<?> critter;
 				try {
 					critter = Class.forName(myPackage + "." + critterName);
@@ -430,36 +450,61 @@ public class Main extends Application{
 				} catch (Exception e) {
 					// will never occur
 				}
-
 			}
 		}
 	}
 
-	private void getRandomSeed(TextField number, Label notif) {
+	/**
+	 * This function determines the user's input request for the "Set Random Seed" function on 
+	 * the control panel and executes that request.
+	 * 
+	 * @param number - TextField containing user's input for what the user would like the random seed to be
+	 */
+	private void getRandomSeed(TextField number) {
+		
 		resetLabels();
+		
+		// there is a number entered
 		if (number.getText()!=null && !number.getText().isEmpty()) {
+			
 			int n;
+			
 			try{
 				n = Integer.parseInt(number.getText());
 			}
+			// invalid inputs
 			catch (Exception e) {
-				notif.setText("Invalid Input");
-				notif.setTextFill(javafx.scene.paint.Color.RED);
+				randomNotif.setText("Invalid Input");
+				randomNotif.setTextFill(javafx.scene.paint.Color.RED);
 				return;
 			}
+			
 			Critter.setSeed(n);
-			notif.setText("Seed: " + n);
-			notif.setTextFill(javafx.scene.paint.Color.GREEN);
+			randomNotif.setText("Seed: " + n);
+			randomNotif.setTextFill(javafx.scene.paint.Color.GREEN);
 		}
 	}
 	
+	/**
+	 * This function resets all clears the notification labels on the screen between actions.
+	 */
 	private void resetLabels() {
 		critterNotif.setText("");
 		randomNotif.setText("");
 		tsNotif.setText("");
 	}
 
-
+	/**
+	 * OBTAINED FROM: http://stackoverflow.com/a/520344
+	 * This function utilizes Java's built-in website resources to obtain a list of
+	 * all necessary files for the project to run. The function then goes through the list
+	 * and filters out all non-class files and returns a list of Class objects.
+	 * 
+	 * @param packageName String of name of package
+	 * @return Class array 
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	private static Class[] getClasses(String packageName) throws ClassNotFoundException, IOException {
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -482,6 +527,14 @@ public class Main extends Application{
 		return classes.toArray(new Class[classes.size()]);
 	}
 
+	/**
+	 * OBTAINED FROM: http://stackoverflow.com/a/520344
+	 * Given a directory, and using java's File package, find all class files.
+	 * @param directory
+	 * @param packageName
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
 	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
 
 		List<Class> classes = new ArrayList<Class>();
