@@ -199,8 +199,24 @@ public class Main extends Application{
 		performTime.setOnAction(e -> getTimeResults(number2, classes, numSteps));
 		performTime.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		GridPane.setConstraints(performTime, 3, 9);
-
 		
+		// "Reset World" function
+		Button reset = new Button("Reset World");
+		reset.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				resetLabels();
+				Critter.clearWorld();
+				Critter.displayWorld(worldGrid);
+				timeStep = 0;
+				numSteps.setText("Time Step: " + timeStep);
+
+			}
+		});
+		reset.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setConstraints(reset, 3, 19);
+
+
 		// "Animation Speed" function
 		Label speed = new Label("Animate:");
 		GridPane.setConstraints(speed, 0, 11);
@@ -239,10 +255,13 @@ public class Main extends Application{
 				makeCritter.setDisable(false);
 				performTime.setDisable(false);
 				performSeed.setDisable(false);
+				reset.setDisable(false);
 				animateNotif.setText("");
 			}
 		});
 
+		
+		
 		Button start = new Button("Start");
 		GridPane.setConstraints(start, 3, 11);
 		start.setOnAction(new EventHandler<ActionEvent>() {
@@ -258,6 +277,7 @@ public class Main extends Application{
 					makeCritter.setDisable(true);
 					performTime.setDisable(true);
 					performSeed.setDisable(true);
+					reset.setDisable(true);
 					
 					String chosen = speedChoice.getValue();
 					if (chosen.equals("Slow")) speedInd = 1000000000;
@@ -273,21 +293,7 @@ public class Main extends Application{
 		});
 
 		
-		// "Reset World" function
-		Button reset = new Button("Reset World");
-		reset.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				resetLabels();
-				Critter.clearWorld();
-				Critter.displayWorld(worldGrid);
-				timeStep = 0;
-				numSteps.setText("Time Step: " + timeStep);
-				
-			}
-		});
-		reset.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		GridPane.setConstraints(reset, 3, 19);
+		
 
 
 		// "Exit Critters" function

@@ -41,8 +41,8 @@ public class World {
 
 	static {
 		int max = Math.max(Params.world_height, Params.world_width);
-		if (max > 100) { max = 100; }
-		pixels = (800/max);
+		if (max > 110) { max = 110; }
+		pixels = (900/max);
 		
 		
 	}
